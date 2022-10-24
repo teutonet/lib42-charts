@@ -7,6 +7,12 @@ metadata:
   annotations:
     {{- toYaml $.Values.ingress.annotations | default dict | nindent 4 }}
 spec:
+  defaultBackend:
+    service:
+      name: defaultbackend
+      port:
+        number: 80
+  ingressClassName: {{ $.Values.ingress.className }}
   rules:
   - host: {{ $.Values.ingress.host }}
     http:
@@ -18,4 +24,10 @@ spec:
               number: 8000
         path: /
         pathType: Prefix
+  {{ if $.Values.ingress.tls.enabled }}
+  tls:
+  - hosts:
+    - {{ $.Values.ingress.host }}
+    secretName: ara-secret
+  {{ end }}
 {{- end }}

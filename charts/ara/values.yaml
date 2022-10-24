@@ -4,10 +4,10 @@ pullPolicy: IfNotPresent
 
 # You can configure ARA using Environment Variables
 # See: https://ara.readthedocs.io/en/latest/api-configuration.html
-env: {}
-#  ARA_ALLOWED_HOSTS: "[ '127.0.0.1', 'localhost', '::1' ]"
+env:
+  ARA_ALLOWED_HOSTS: "[ 'ara.example.com', '127.0.0.1', '212.15.214.173' ]" # CHANGE ME
+  ARA_CORS_ORIGIN_REGEX_WHITELIST: "[ '.*' ]"
 #  ARA_CORS_ORIGIN_WHITELIST:  "['http://127.0.0.1:8000', 'http://localhost:8000']"
-#  ARA_CORS_ORIGIN_REGEX_WHITELIST: "[ '.*' ]"
 #  ARA_DATABASE_ENGINE: django.db.backends.sqlite3
 #  ARA_DATABASE_HOST: None
 #  ARA_DATABASE_NAME: /opt/ara/server-ansible.sqlite
@@ -25,18 +25,24 @@ env: {}
 
 # Ingress Controller
 ingress:
-  enabled: false
+  enabled: true
+  className: nginx
+
+  tls:
+    enabled: true
 
   # Ingress Annotations:
-  annotations: {}
+  annotations: 
+    cert-manager.io/cluster-issuer: letsencrypt-http01-production
 
   # Domain for ara:
-  host: ara.domain
+  # CHANGE ME
+  host: ara.example.com 
 
 # Resource limits/request
 resources: {}
 
 # Persistent volume for SQLite DB:
 persistentVolumes:
-  enabled: false
-  storageClassName: ""
+  enabled: true
+  storageClassName: "teutostack-ssd"
